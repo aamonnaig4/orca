@@ -23,6 +23,8 @@ export const PLUGIN_HOOKS_SINCE = '1.4.248'
 export const PLUGIN_HOST_ACTIONS_SINCE = '1.4.248'
 /** First release that plays an app theme's `background.videoPath`. */
 export const PLUGIN_THEME_VIDEO_BACKGROUND_SINCE = '1.4.254'
+/** First release that draws a panel's `glyph` image in the activity bar. */
+export const PLUGIN_PANEL_GLYPH_SINCE = '1.4.260'
 
 type PluginFieldDoc = {
   description: string

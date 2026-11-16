@@ -577,6 +577,17 @@
             "link"
           ]
         },
+        "glyph": {
+          "description": "Image shown in the activity bar instead of `icon`. Orca draws its shape from the alpha channel in the theme's icon color, so use a transparent silhouette. Format 2 manifests only. PNG, WEBP, static, at least 128×128, square, at most 256 KB. Relative to the plugin root; `..` segments and Windows device names such as `CON` are refused.",
+          "x-orca-since": "1.4.260",
+          "examples": [
+            "media/activity-bar.png"
+          ],
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024,
+          "pattern": "^[^<>:\"|?*\\x00-\\x1f\\\\/]*[^<>:\"|?*\\x00-\\x1f\\\\/. ](?:[\\\\/][^<>:\"|?*\\x00-\\x1f\\\\/]*[^<>:\"|?*\\x00-\\x1f\\\\/. ])*$"
+        },
         "entry": {
           "type": "string",
           "minLength": 1,

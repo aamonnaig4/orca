@@ -11,6 +11,8 @@ export type PluginHostPanel = {
   title: string
   /** Lucide icon name declared in the plugin manifest. */
   icon?: string
+  /** orca-plugin-image URL of the panel's activity-bar glyph; absent when it declares none. */
+  glyphUrl?: string
   tabKey: `plugin:${string}`
 }
 

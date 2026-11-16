@@ -7,8 +7,10 @@ import {
   type PluginImageKind
 } from '../../../shared/plugins/images/plugin-image-fields'
 
+export const PLUGIN_PANEL_GLYPH_SLOT_PREFIX = 'panel-glyph-'
+
 /** The images a format 2 manifest declares, each with the URL slot it is served under and the
- *  rules it must meet. Editor and new-file icons follow the plugin icon's rules. */
+ *  rules it must meet. Editor icons, new-file icons and panel glyphs follow the plugin icon's rules. */
 export function declaredPluginImages(
   manifest: PluginManifest
 ): { kind: PluginImageKind; path: string; slot: string }[] {
@@ -33,6 +35,9 @@ export function declaredPluginImages(
     ),
     ...manifest.contributes.newFiles.flatMap((newFile, index) =>
       icon(`new-file-${index}`, newFile.icon)
+    ),
+    ...manifest.contributes.panels.flatMap((panel, index) =>
+      icon(`${PLUGIN_PANEL_GLYPH_SLOT_PREFIX}${index}`, panel.glyph)
     )
   ]
 }

@@ -2,6 +2,7 @@ import { Plug } from 'lucide-react'
 import type { ActivePluginPanel } from '@/store/plugins/catalog/plugin-contribution-catalog'
 import type { ActivityBarItem } from '../activity-bar/activity-bar-buttons'
 import { resolvePluginIconGlyph } from '../../plugins/plugin-icon-glyphs'
+import { pluginPanelGlyphIcon } from './plugin-panel-glyph-icon'
 
 type PluginPanelIcon = ActivityBarItem['icon']
 
@@ -16,7 +17,9 @@ export function getPluginPanelActivityItems(
   return panels.map((panel) => ({
     id: panel.tabKey,
     pluginKey: panel.pluginKey,
-    icon: resolvePluginPanelIcon(panel.icon),
+    icon: panel.glyphUrl
+      ? pluginPanelGlyphIcon(panel.glyphUrl)
+      : resolvePluginPanelIcon(panel.icon),
     // Manifest titles are plugin-owned and render without app-catalog translation.
     title: panel.title,
     shortcut: '',

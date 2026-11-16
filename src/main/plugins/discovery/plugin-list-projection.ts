@@ -1,4 +1,5 @@
 import { PLUGIN_CAPABILITY_DESCRIPTIONS } from '../../../shared/plugins/capabilities/plugin-capabilities'
+import { PLUGIN_PANEL_GLYPH_SLOT_PREFIX } from '../media/plugin-image-artifact-validation'
 import { needsReconsent } from '../../../shared/plugins/approval/plugin-consent-state'
 import { pluginPanelTabKey } from '../../../shared/plugins/frames/plugin-tab-key'
 import type { PluginLockfile } from '../../../shared/plugins/installation/plugin-install-lockfile'
@@ -151,10 +152,14 @@ export async function buildPluginList(
           ? candidateLockEntry
           : undefined
       // Why format 2 only: the image protocol serves no format 1 image, so a URL would 404.
-      const contributionIcon = (slot: string, path: string | undefined) =>
+      const contributionImageUrl = (slot: string, path: string | undefined) =>
         path !== undefined && plugin.manifest.manifestVersion === 2
-          ? { icon: pluginInstalledImageUrl(plugin.pluginKey, plugin.contentHash ?? 'dev', slot) }
-          : {}
+          ? pluginInstalledImageUrl(plugin.pluginKey, plugin.contentHash ?? 'dev', slot)
+          : undefined
+      const contributionIcon = (slot: string, path: string | undefined) => {
+        const icon = contributionImageUrl(slot, path)
+        return icon ? { icon } : {}
+      }
       const bundled = lockEntry?.source.kind === 'bundled'
       const official =
         bundled ||
@@ -189,12 +194,19 @@ export async function buildPluginList(
           kind: capability.kind,
           description: PLUGIN_CAPABILITY_DESCRIPTIONS[capability.kind]
         })),
-        panels: plugin.manifest.contributes.panels.map((panel) => ({
-          id: panel.id,
-          title: panel.title,
-          ...(panel.icon ? { icon: panel.icon } : {}),
-          tabKey: pluginPanelTabKey(plugin.pluginKey, panel.id)
-        })),
+        panels: plugin.manifest.contributes.panels.map((panel, index) => {
+          const glyphUrl = contributionImageUrl(
+            `${PLUGIN_PANEL_GLYPH_SLOT_PREFIX}${index}`,
+            panel.glyph
+          )
+          return {
+            id: panel.id,
+            title: panel.title,
+            ...(panel.icon ? { icon: panel.icon } : {}),
+            ...(glyphUrl ? { glyphUrl } : {}),
+            tabKey: pluginPanelTabKey(plugin.pluginKey, panel.id)
+          }
+        }),
         customEditors: plugin.manifest.contributes.customEditors.map((editor, index) => ({
           id: editor.id,
           title: editor.title,

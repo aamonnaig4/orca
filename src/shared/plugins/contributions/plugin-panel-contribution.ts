@@ -2,9 +2,11 @@ import { z } from 'zod'
 import { safePluginDisplayText } from '../manifest/plugin-display-text'
 import { pluginIdSchema, pluginRelativePathSchema } from '../manifest/plugin-manifest-fields'
 import { PLUGIN_ENUM_SINCE_KEY } from '../manifest/plugin-engine-floor-keys'
+import { PLUGIN_ICON_RULE_TEXT } from '../images/plugin-image-fields'
 import {
   pluginPathFieldDoc,
   pluginFieldDoc,
+  PLUGIN_PANEL_GLYPH_SINCE,
   PLUGIN_PANEL_UI_SINCE,
   PLUGIN_SCHEMA_SINCE_V1,
   PLUGIN_SOURCE_MODULES_SINCE
@@ -122,6 +124,15 @@ export const pluginPanelContributionSchema = z
         ),
         [PLUGIN_ENUM_SINCE_KEY]: PLUGIN_PANEL_ICON_SINCE
       }),
+    glyph: pluginRelativePathSchema
+      .optional()
+      .meta(
+        pluginPathFieldDoc(
+          `Image shown in the activity bar instead of \`icon\`. Orca draws its shape from the alpha channel in the theme's icon color, so use a transparent silhouette. Format 2 manifests only. ${PLUGIN_ICON_RULE_TEXT}`,
+          PLUGIN_PANEL_GLYPH_SINCE,
+          ['media/activity-bar.png']
+        )
+      ),
     entry: pluginRelativePathSchema.meta(
       pluginPathFieldDoc(
         `What the panel runs: an HTML page for \`ui: "html"\`, a \`.js\`/\`.mjs\` module for \`ui: "components"\`. Either may instead be a \`.ts\`/\`.tsx\`/\`.mts\`/\`.jsx\` file, which Orca transpiles when it loads (needs \`engines.orca\` \`>=${PLUGIN_SOURCE_MODULES_SINCE}\`; an \`html\` panel then gets a generated page around it). It is trusted code: install panels you trust.`,

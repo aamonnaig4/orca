@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { pluginShaImageUrl, servedPluginHostImages } from './plugin-image-url'
+import { parsePluginImageUrl, pluginShaImageUrl, servedPluginHostImages } from './plugin-image-url'
 
 const served = { url: pluginShaImageUrl('a'.repeat(64)), alt: 'Cover' }
 
@@ -13,5 +13,18 @@ describe('servedPluginHostImages', () => {
         screenshots: [hotlinked('data:image/svg+xml,<svg/>'), served, hotlinked('file:///etc/x')]
       })
     ).toEqual({ cover: served, screenshots: [served] })
+  })
+})
+
+describe('parsePluginImageUrl', () => {
+  it('routes a panel glyph slot to its installed plugin', () => {
+    expect(
+      parsePluginImageUrl('orca-plugin-image://installed/acme.board/dev/panel-glyph-3')
+    ).toEqual({
+      kind: 'installed',
+      pluginKey: 'acme.board',
+      contentHash: 'dev',
+      slot: 'panel-glyph-3'
+    })
   })
 })
